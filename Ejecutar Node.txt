@@ -1,0 +1,10 @@
+En terminal de visual studio code poner
+
+nodemon server/server
+
+en la mayoria ocupas instalar express 
+npm install express --save
+---------------
+notas
+token xd
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjp7InJvbGUiOiJVU0VSX1JPTEUiLCJlc3RhZG8iOnRydWUsImdvb2dsZSI6ZmFsc2UsIl9pZCI6IjVmNDkzNDVmMTI1ZWNmNDNiNGNiM2Y1OSIsIm5vbWJyZSI6ImNhcmxvcyBvayIsImVtYWlsIjoiY2RmbjNAaG90bWFpbC5jb20iLCJfX3YiOjB9LCJpYXQiOjE1OTg2NTU5OTEsImV4cCI6MTU5ODgyODc5MX0.Onbyp-gx7SdCfTNt4tfupMOVWyoXzAeUbKauQTn1v3g
