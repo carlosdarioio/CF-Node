@@ -1,8 +1,11 @@
 #CF-Node
+
 #tutorial mysql con nodemoon
+
 https://github.com/mysqljs/mysql
 Empezando? 
 pasos para utilizarlo:
+
 1-abrir cmd como administrador
 
 2-con cmd ir a direccion del proyecto : cd xxx
