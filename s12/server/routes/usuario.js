@@ -142,6 +142,77 @@ app.delete('/usuario/:id', [verificaToken, verificaAdmin_Role], function(req, re
 
 });
 
+//Actualizar contraseña
+app.post('/usuario/updatepsd', (req, res) => { //, [verificaToken]
+
+    let body = req.body;
+    let id = 0;
+
+    Usuario.findOne({ email: body.email }, (err, usuarioDB) => {
+        id = usuarioDB._id;
+        if (err) {
+            return res.status(500).json({
+                ok: false,
+                err
+            });
+        }
+
+        if (!usuarioDB) {
+            return res.status(400).json({
+                ok: false,
+                err: {
+                    message: '(Usuario) o contraseña incorrectos'
+                }
+            });
+        }
+
+
+        if (!bcrypt.compareSync(body.passwordactual, usuarioDB.password)) {
+            return res.status(400).json({
+                ok: false,
+                err: {
+                    message: 'Usuario o (contraseña) incorrectos'
+                }
+            });
+        }
+
+        //--------------
+        console.log('id val ' + id);
+        let descUsuario = {
+            password: bcrypt.hashSync(body.newpassword, 10)
+        };
+        //x aqui vas so descomentas esto da error
+        /**/
+        Usuario.findByIdAndUpdate(id, descUsuario, { new: true, runValidators: true }, (err, usuarioDB) => {
+
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    err
+                });
+            }
+
+            if (!usuarioDB) {
+                return res.status(400).json({
+                    ok: false,
+                    err
+                });
+            }
+
+            res.json({
+                ok: true,
+                usuario: usuarioDB
+            });
+
+        });
+        /**/
+        //--------------
+    });
+
+
+
+});
+
 
 
 module.exports = app;

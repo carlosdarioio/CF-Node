@@ -17,7 +17,10 @@ app.get('/solicitud', verificaToken, (req, res) => {
     let limite = req.query.limite || 5;
     limite = Number(limite);
 
-    Solicitud.find({ cancelado: false }, 'tema descripcion estados fecha')
+    Solicitud.find({}) // cancelado: false 
+        .sort('tema descripcion estados fecha')
+        .populate('solicitante', 'nombre email')
+        .populate('asignado', 'nombre email')
         .skip(desde)
         .limit(limite)
         .exec((err, solicitud) => { //base de datos
@@ -55,7 +58,8 @@ app.post('/solicitud', [verificaToken], function(req, res) {
         tema: body.tema,
         descripcion: body.descripcion,
         estados: 'Solicitado',
-        cancelado: false
+        cancelado: false,
+        solicitante: body.solicitante
 
     });
 
