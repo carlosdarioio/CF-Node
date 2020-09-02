@@ -19,6 +19,7 @@ app.get('/solicitud', verificaToken, (req, res) => {
 
     Solicitud.find({}) // cancelado: false 
         .sort('tema descripcion estados fecha')
+        .populate('departamento', 'nombre')
         .populate('solicitante', 'nombre email')
         .populate('asignado', 'nombre email')
         .skip(desde)
@@ -59,6 +60,7 @@ app.post('/solicitud', [verificaToken], function(req, res) {
         descripcion: body.descripcion,
         estados: 'Solicitado',
         cancelado: false,
+        departamento: body.departamento,
         solicitante: body.solicitante
 
     });
@@ -107,7 +109,7 @@ app.put('/solicitud/:id', [verificaToken], function(req, res) {
             solicitud: solicitudDB
         });
 
-    })
+    });
 
 });
 
@@ -130,7 +132,7 @@ app.delete('/solicitud/:id', [verificaToken, verificaAdmin_Role], function(req, 
                 ok: false,
                 err
             });
-        };
+        }
 
         if (!solicitudBorrado) {
             return res.status(400).json({
@@ -150,6 +152,36 @@ app.delete('/solicitud/:id', [verificaToken, verificaAdmin_Role], function(req, 
 
 
 
+});
+
+
+//buscar solicitus por tema, descripcion, usuario o departamento.nombre
+app.get('/solicitud/buscar/:termino', verificaToken, (req, res) => {
+
+    let termino = req.params.termino;
+
+    let regex = new RegExp(termino, 'i');
+    //alola pendiente obtener comentarios para mandarlos
+    Solicitud.find({ $or: [{ tema: regex }, { nombre: regex }, { descripcion: regex }, { email: regex }] })
+        .populate('departamento', 'nombre descripcion')
+        .populate('solicitante', 'nombre email')
+        .populate('asignado', 'nombre email')
+        .exec((err, solicitud) => {
+
+
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    err
+                });
+            }
+
+            res.json({
+                ok: true,
+                solicitud
+            });
+
+        });
 });
 
 

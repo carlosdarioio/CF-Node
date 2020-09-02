@@ -98,7 +98,7 @@ app.put('/usuario/:id', [verificaToken, verificaAdmin_Role], function(req, res) 
             usuario: usuarioDB
         });
 
-    })
+    });
 
 });
 
@@ -120,7 +120,7 @@ app.delete('/usuario/:id', [verificaToken, verificaAdmin_Role], function(req, re
                 ok: false,
                 err
             });
-        };
+        }
 
         if (!usuarioBorrado) {
             return res.status(400).json({
@@ -147,7 +147,7 @@ app.post('/usuario/updatepsd', (req, res) => { //, [verificaToken]
 
     let body = req.body;
     let id = 0;
-
+    //Buscando usuario con email ingresado
     Usuario.findOne({ email: body.email }, (err, usuarioDB) => {
         id = usuarioDB._id;
         if (err) {
@@ -156,7 +156,7 @@ app.post('/usuario/updatepsd', (req, res) => { //, [verificaToken]
                 err
             });
         }
-
+        //Si no tuvo resultados devuelve error 400
         if (!usuarioDB) {
             return res.status(400).json({
                 ok: false,
@@ -165,8 +165,7 @@ app.post('/usuario/updatepsd', (req, res) => { //, [verificaToken]
                 }
             });
         }
-
-
+        //si la contrasela es incorrecta devuelve error 400
         if (!bcrypt.compareSync(body.passwordactual, usuarioDB.password)) {
             return res.status(400).json({
                 ok: false,
@@ -181,9 +180,11 @@ app.post('/usuario/updatepsd', (req, res) => { //, [verificaToken]
         let descUsuario = {
             password: bcrypt.hashSync(body.newpassword, 10)
         };
-        //x aqui vas so descomentas esto da error
+
         /**/
+        //actualizando password
         Usuario.findByIdAndUpdate(id, descUsuario, { new: true, runValidators: true }, (err, usuarioDB) => {
+
 
             if (err) {
                 return res.status(500).json({
@@ -212,6 +213,34 @@ app.post('/usuario/updatepsd', (req, res) => { //, [verificaToken]
 
 
 });
+
+
+//  Buscar usuarios
+app.get('/usuario/buscar/:termino', verificaToken, (req, res) => {
+
+    let termino = req.params.termino;
+
+    let regex = new RegExp(termino, 'i');
+
+    Usuario.find({ $or: [{ nombre: regex }, { email: regex }] })
+        .exec((err, usuarios) => {
+
+
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    err
+                });
+            }
+
+            res.json({
+                ok: true,
+                usuarios
+            });
+
+        });
+});
+
 
 
 

@@ -4,17 +4,17 @@ let { verificaToken } = require('../middlewares/autenticacion'); //, verificaAdm
 
 let app = express();
 
-let Departamento = require('../models/departamento');
+let Comentario = require('../models/comentarios');
 
 // ============================
-// Mostrar todos los departamentos
+// Mostrar todos los comentarios
 // ============================
-app.get('/departamento', verificaToken, (req, res) => {
+app.get('/comentarios', verificaToken, (req, res) => {
 
-    Departamento.find({})
-        .sort('nombre descripcion')
+    Comentario.find({})
+        .sort('descripcion fecha')
         .populate('usuario', 'nombre email')
-        .exec((err, departamentos) => {
+        .exec((err, comentarios) => {
 
             if (err) {
                 return res.status(500).json({
@@ -25,31 +25,55 @@ app.get('/departamento', verificaToken, (req, res) => {
 
             res.json({
                 ok: true,
-                departamentos
+                comentarios
             });
 
-        })
+        });
+});
+
+//Obtener departamento por id
+app.get('/comentarios/getById/:id', verificaToken, (req, res) => {
+
+    let id = req.params.id;
+    Comentario.find({ _id: id })
+        .exec((err, comentarios) => {
+
+
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    err
+                });
+            }
+
+            res.json({
+                ok: true,
+                comentarios
+            });
+
+        });
 });
 
 
 
 
+//x aqui vas postia comentaroi y mira si se ingresa
 // ============================
-// Crear nueva departamento
+// Crear nueva comentarios
 // ============================
-app.post('/departamento', verificaToken, (req, res) => {
-    // regresa la nueva departamento
+app.post('/comentarios', verificaToken, (req, res) => {
+    // regresa la nueva comentarios
     // req.usuario._id
     let body = req.body;
 
-    let departamento = new Departamento({
+    let comentarios = new Comentario({
         nombre: body.nombre,
         descripcion: body.descripcion
             //,        usuario: req.usuario._id
     });
 
 
-    departamento.save((err, departamentoDB) => {
+    comentarios.save((err, comentariosDB) => {
 
         if (err) {
             return res.status(500).json({
@@ -58,7 +82,7 @@ app.post('/departamento', verificaToken, (req, res) => {
             });
         }
 
-        if (!departamentoDB) {
+        if (!comentariosDB) {
             return res.status(400).json({
                 ok: false,
                 err
@@ -67,7 +91,7 @@ app.post('/departamento', verificaToken, (req, res) => {
 
         res.json({
             ok: true,
-            departamento: departamentoDB
+            comentarios: comentariosDB
         });
 
 
@@ -78,19 +102,19 @@ app.post('/departamento', verificaToken, (req, res) => {
 
 
 // ============================
-// Mostrar todas las departamentos
+// Mostrar todas las comentarios
 // ============================
-app.put('/departamento/:id', verificaToken, (req, res) => {
+app.put('/comentarios/:id', verificaToken, (req, res) => {
 
     let id = req.params.id;
     let body = req.body;
 
-    let descDepartamento = {
+    let descComentario = {
         nombre: body.nombre,
         descripcion: body.descripcion
     };
 
-    Departamento.findByIdAndUpdate(id, descDepartamento, { new: true, runValidators: true }, (err, departamentoDB) => {
+    Comentario.findByIdAndUpdate(id, descComentario, { new: true, runValidators: true }, (err, comentariosDB) => {
 
         if (err) {
             return res.status(500).json({
@@ -99,7 +123,7 @@ app.put('/departamento/:id', verificaToken, (req, res) => {
             });
         }
 
-        if (!departamentoDB) {
+        if (!comentariosDB) {
             return res.status(400).json({
                 ok: false,
                 err
@@ -108,7 +132,7 @@ app.put('/departamento/:id', verificaToken, (req, res) => {
 
         res.json({
             ok: true,
-            departamento: departamentoDB
+            comentarios: comentariosDB
         });
 
     });

@@ -40,6 +40,7 @@ let solicitudSchema = new Schema({
         default: false,
         unique: false
     },
+    departamento: { type: Schema.Types.ObjectId, ref: 'Departamento', unique: false },
     solicitante: { type: Schema.Types.ObjectId, ref: 'Usuario', unique: false },
     asignado: { type: Schema.Types.ObjectId, ref: 'Usuario', unique: false }
 });

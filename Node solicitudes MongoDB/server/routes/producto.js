@@ -38,7 +38,7 @@ app.get('/productos', verificaToken, (req, res) => {
             });
 
 
-        })
+        });
 
 });
 
@@ -104,9 +104,9 @@ app.get('/productos/buscar/:termino', verificaToken, (req, res) => {
             res.json({
                 ok: true,
                 productos
-            })
+            });
 
-        })
+        });
 
 
 });
@@ -246,9 +246,9 @@ app.delete('/productos/:id', verificaToken, (req, res) => {
                 mensaje: 'Producto borrado'
             });
 
-        })
+        });
 
-    })
+    });
 
 
 });
