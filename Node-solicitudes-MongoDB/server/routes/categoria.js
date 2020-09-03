@@ -148,7 +148,7 @@ app.put('/categoria/:id', verificaToken, (req, res) => {
 });
 
 // ============================
-// Mostrar todas las categorias
+// borar todas las categorias
 // ============================
 app.delete('/categoria/:id', [verificaToken, verificaAdmin_Role], (req, res) => {
     // solo un administrador puede borrar categorias

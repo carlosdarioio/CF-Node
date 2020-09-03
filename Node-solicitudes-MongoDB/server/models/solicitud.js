@@ -42,7 +42,8 @@ let solicitudSchema = new Schema({
     },
     departamento: { type: Schema.Types.ObjectId, ref: 'Departamento', unique: false },
     solicitante: { type: Schema.Types.ObjectId, ref: 'Usuario', unique: false },
-    asignado: { type: Schema.Types.ObjectId, ref: 'Usuario', unique: false }
+    asignado: { type: Schema.Types.ObjectId, ref: 'Usuario', unique: false },
+    //comentario: { type: Schema.Types.ObjectId, ref: 'Comentario', unique: false }//ni modo los comentarios van aparte
 });
 
 solicitudSchema.methods.toJSON = function() {
@@ -52,7 +53,7 @@ solicitudSchema.methods.toJSON = function() {
     delete solicituObject.cancelado;
 
     return solicituObject;
-}
+};
 
 
 solicitudSchema.plugin(uniqueValidator, { message: '{PATH} debe de ser único' });

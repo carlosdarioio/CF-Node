@@ -2,6 +2,7 @@ Ejecutar proyecto:
 cmd
 cd dir
 nodemon server/server
+
 tutorial mysql con nodemoon
 https://github.com/mysqljs/mysql
 Empezando? 
@@ -32,9 +33,6 @@ nodemoon + direccion:  nodemoon dist/index.js
 
 abrir proyecto con visual studio code
 
-Practica realizada en el curso:
-https://www.udemy.com/course/node-de-cero-a-experto/
-
 
 -para que el visual studio evalue el es6
 crear archivo .jshintrc 
@@ -42,3 +40,8 @@ poner
 {
     "esversion": 6
 }
+
+
+
+Practicas realizadas en el curso:
+https://www.udemy.com/course/node-de-cero-a-experto/

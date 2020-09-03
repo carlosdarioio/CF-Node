@@ -5,7 +5,8 @@ let { verificaToken } = require('../middlewares/autenticacion'); //, verificaAdm
 let app = express();
 
 let Departamento = require('../models/departamento');
-
+//x aqui vas intenta crear un post donde recibas el id de usuario y una lista de departamentos con nombre y descripcion que tenes que insertar a la base de datos 
+//eso para practica la obtencion de clases
 // ============================
 // Mostrar todos los departamentos
 // ============================
@@ -68,8 +69,10 @@ app.post('/departamento', verificaToken, (req, res) => {
 
     let departamento = new Departamento({
         nombre: body.nombre,
-        descripcion: body.descripcion
-            //,        usuario: req.usuario._id
+        descripcion: body.descripcion,
+        usuario: body.usuario
+
+        //,        usuario: req.usuario._id
     });
 
 
@@ -140,6 +143,54 @@ app.put('/departamento/:id', verificaToken, (req, res) => {
 
 });
 
+
+// ============================
+// Crear lista de departamentos posteados
+// ============================
+app.post('/departamento/departamentospost', (req, res) => { //, verificaToken
+    //x aqui vas funcional
+    let body = req.body;
+    console.log(body);
+    //dos opciones directo: body.departamentos.map(({ nombre }) => console.log(nombre));    
+    //con acciones
+    body.departamentos.forEach(function(dep) {
+        console.log(body.usuario);
+        console.log(dep.nombre);
+
+        let departamento = new Departamento({
+            nombre: dep.nombre,
+            descripcion: dep.descripcion,
+            usuario: body.usuario
+        });
+        departamento.save((err, departamentoDB) => {
+
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    err
+                });
+            }
+
+            if (!departamentoDB) {
+                return res.status(400).json({
+                    ok: false,
+                    err
+                });
+            }
+
+        });
+
+    });
+
+
+    res.json({
+        ok: true,
+        message: "Departamentos creados",
+        departamento: body
+    });
+
+
+});
 
 
 module.exports = app;

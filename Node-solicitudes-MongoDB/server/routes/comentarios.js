@@ -14,6 +14,7 @@ app.get('/comentarios', verificaToken, (req, res) => {
     Comentario.find({})
         .sort('descripcion fecha')
         .populate('usuario', 'nombre email')
+        .populate('solicitud', '_id')
         .exec((err, comentarios) => {
 
             if (err) {
@@ -54,6 +55,29 @@ app.get('/comentarios/getById/:id', verificaToken, (req, res) => {
         });
 });
 
+//Obtener departamento por solicitudid
+app.get('/comentarios/getBySolId/:id', verificaToken, (req, res) => {
+
+    let id = req.params.id;
+    Comentario.find({ solicitud: id })
+        .exec((err, comentarios) => {
+
+
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    err
+                });
+            }
+
+            res.json({
+                ok: true,
+                comentarios
+            });
+
+        });
+});
+
 
 
 
@@ -67,9 +91,9 @@ app.post('/comentarios', verificaToken, (req, res) => {
     let body = req.body;
 
     let comentarios = new Comentario({
-        nombre: body.nombre,
+        solicitud: body.solicitud,
+        usuario: body.usuario,
         descripcion: body.descripcion
-            //,        usuario: req.usuario._id
     });
 
 
@@ -110,7 +134,6 @@ app.put('/comentarios/:id', verificaToken, (req, res) => {
     let body = req.body;
 
     let descComentario = {
-        nombre: body.nombre,
         descripcion: body.descripcion
     };
 
@@ -140,6 +163,40 @@ app.put('/comentarios/:id', verificaToken, (req, res) => {
 
 });
 
+// ============================
+// Mostrar todas las comentarios
+// ============================
+app.delete('/comentarios/:id', [verificaToken], (req, res) => {
+    // solo un administrador puede borrar comentarios    
+    let id = req.params.id;
+
+    Comentario.findByIdAndRemove(id, (err, comentariosDB) => {
+
+        if (err) {
+            return res.status(500).json({
+                ok: false,
+                err
+            });
+        }
+
+        if (!comentariosDB) {
+            return res.status(400).json({
+                ok: false,
+                err: {
+                    message: 'El id no existe'
+                }
+            });
+        }
+
+        res.json({
+            ok: true,
+            message: 'Comentario Borrada'
+        });
+
+    });
+
+
+});
 
 
 module.exports = app;

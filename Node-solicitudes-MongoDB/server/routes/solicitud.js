@@ -22,6 +22,7 @@ app.get('/solicitud', verificaToken, (req, res) => {
         .populate('departamento', 'nombre')
         .populate('solicitante', 'nombre email')
         .populate('asignado', 'nombre email')
+        .populate('comentario', 'descripcion')
         .skip(desde)
         .limit(limite)
         .exec((err, solicitud) => { //base de datos
@@ -166,6 +167,7 @@ app.get('/solicitud/buscar/:termino', verificaToken, (req, res) => {
         .populate('departamento', 'nombre descripcion')
         .populate('solicitante', 'nombre email')
         .populate('asignado', 'nombre email')
+        //.populate('comentario', 'descripcion')
         .exec((err, solicitud) => {
 
 

@@ -10,6 +10,7 @@ app.use(require('./upload'));
 app.use(require('./imagenes'));
 app.use(require('./departamento'));
 app.use(require('./solicitud'));
+app.use(require('./comentarios'));
 
 
 module.exports = app;
